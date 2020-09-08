@@ -1,0 +1,16 @@
+---
+title: "Final assingment BDAwR"
+author: "Lino Zurmühl"
+date: "8 9 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Article review "Are Social Bots on Twitter Political Actors? Emoirical Evidence from a UkrainianSocial Botnet" Hegelich/Janetzko 2016
+
+originating question: Are Social bots Political actors?
+central question: has the Ukrainian Social Botnet an political agenda?
+specifying questions: what behaviors does the botnet have? how can these behaviors be interpreted? 
+
