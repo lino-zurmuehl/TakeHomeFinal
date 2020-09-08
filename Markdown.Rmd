@@ -11,6 +11,22 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Article review "Are Social Bots on Twitter Political Actors? Emoirical Evidence from a UkrainianSocial Botnet" Hegelich/Janetzko 2016
 
 originating question: Are Social bots Political actors?
-central question: has the Ukrainian Social Botnet an political agenda?
+central question: has the Ukrainian Social Botnet an political agenda? Which kind of behavoir can be identified?
 specifying questions: what behaviors does the botnet have? how can these behaviors be interpreted? 
+
+In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore they posted the question of what different behaviors of the botnet can be identified. 
+
+
+```{r}
+install.packages("rvest")
+install.packages("tidyverse")
+install.packages("rtweet")
+install.packages("magrittr")
+library(rvest)
+library(rtweet)
+library(tidyverse)
+library(magrittr)
+data -> read_csv("TakeHomeFinal\timelines.csv")
+glimpse ()
+```
 
