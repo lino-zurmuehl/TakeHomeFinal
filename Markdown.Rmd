@@ -9,23 +9,21 @@ bibliography: TakeHomeFinal.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-## Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a UkrainianSocial Botnet" Hegelich/Janetzko 2016
-
-originating question: Are Social bots Political actors?
-central question: has the Ukrainian Social Botnet an political agenda? Which kind of behavoir can be identified?
-specifying questions: what behaviors does the botnet have? how can these behaviors be interpreted? 
+## Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a Ukrainian Social Botnet" Hegelich/Janetzko 2016
 
 In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore they posted the question of what different behaviors of the botnet can be identified, if the botnet is only generating meaningless content (in the article labeled as "noise"[@hegelichAreSocialBots2016]) or political content as well, which words are used the most by the botnet and how do they correlate?  
 By answering those questions Hegelich and Janetzko contribute to a better understanding of botnets in general and reveal the difficulty of actually identifying a bot. This article discloses, how much effort is put into the camouflaging of a bot relative to the actual (political) content that the bot is trying to get out. 
 
 Hegelich and Janetzko used different types of analysis to get to this understanding of the botnet. They created a word cloud, looked at the most frequent words used by the botnet, identified the correlations between them, visualized them and used cluster-analysis, like k-Means cluster and Hierarchical cluster analysis to identify a separation between political contend and noise.
 
-The word cloud does not give a clear answer to the question about political agenda. There are frequent tweets of political and non political nature to be seen in the cloud. To get a better overview the authors selected the terms that were used at least 50  times, resulting in a list of words in which political terms were heavily favored. In their next step Hegelich and Janetzko looked at the correlation between these most frequent words and concluded that the most common pair of words was an Ukrainian party name. The k-Means Cluster-Analysis sheds light on the actual behaviors of the botnet. The analysis shows that the biggest cluster of tweets from the bots are links to news-articles, illegal film downloads and jokes, so there is no real political agenda to be found. But in most of the other clusters political themes are dominating. But this analysis is the most telling for the distinctive behaviors of the bots which can be summarized into three behaviors: "hid[ing] their bot-identity [...] by being interesting to normal users whilst promoting topics"[@hegelichAreSocialBots2016]. 
+The word cloud does not give a clear answer to the question about political agenda. There are frequent tweets of political and non political nature to be seen in the cloud. To get a better overview the authors selected the terms that were used at least 50  times, resulting in a list of words in which political terms were heavily favored. In their next step Hegelich and Janetzko looked at the correlation between these most frequent words and concluded that the most common pair of words was an Ukrainian party name. The k-Means Cluster-Analysis sheds light on the actual behaviors of the botnet. The analysis shows that the biggest cluster of tweets from the bots are links to news-articles, illegal film downloads and jokes, so there is no real political agenda to be found. But in most of the other clusters political themes are dominating. But this analysis is the most telling for the distinctive behaviors of the bots which can be summarized into three behaviors: "hid[ing] their bot-identity [...] by being interesting to normal users whilst promoting topics"[@hegelichAreSocialBots2016]. #
+
+With these findings the two authors conclude that firstly: a political agenda can be seen inside of the examined botnet and secondly: the three patterns of behavior mentioned above (mimicry, Window Dressing, Reverberation) emerge in the examined botnet. In their last paragraph Hegelich and Janetzko also state that the study reveals the autonomy of the bots, which in my view could be explained in more detail, as it is not totally clear why these findings infer which algorithms and which abstract rules the bots follow. 
 
 
 ```{r}
 #install.packages("rvest")
-install.packages("tidyverse")
+#install.packages("tidyverse")
 #install.packages("rtweet")
 #install.packages("magrittr")
 #library(rvest)
