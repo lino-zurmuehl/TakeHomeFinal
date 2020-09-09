@@ -3,6 +3,7 @@ title: "Final assingment BDAwR"
 author: "Lino Zurmühl"
 date: "8 9 2020"
 output: html_document
+bibliography: TakeHomeFinal.json
 ---
 
 ```{r setup, include=FALSE}
@@ -14,8 +15,9 @@ originating question: Are Social bots Political actors?
 central question: has the Ukrainian Social Botnet an political agenda? Which kind of behavoir can be identified?
 specifying questions: what behaviors does the botnet have? how can these behaviors be interpreted? 
 
-In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore they posted the question of what different behaviors of the botnet can be identified. 
-
+In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore they posted the question of what different behaviors of the botnet can be identified, if the botnet is only generating meaningless content (in the article labeled as "noise") or political content as well, which words are used the most by the botnet and how do they correlate?  
+By answering those questions Hegelich and Janetzko contribute to a better understanding of botnets in general and reveal the difficulty of actually identifying a bot. This article discloses, how much effort is put into the camouflaging of a bot relative to the actual (political) content that the bot is trying to get out. 
+Hegelich and Janetzko used different types of analysis to get an answer. They created a word cloud, looked at the most freqent words, identified the correlations between them, visualized them and used cluster-analysis, like K-means cluster and Hierarchical cluster analysis. 
 
 ```{r}
 install.packages("rvest")
