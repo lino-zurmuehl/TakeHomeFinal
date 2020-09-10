@@ -26,12 +26,43 @@ With these findings the two authors conclude that firstly: a political agenda ca
 #install.packages("tidyverse")
 #install.packages("rtweet")
 #install.packages("magrittr")
-#library(rvest)
+library(rvest)
 #library(rtweet)
 library(tidyverse)
 #library(magrittr)
 data <- read_csv("timelines.csv")
-glimpse (data)
+
+wiki_senators <- read_html("https://en.wikipedia.org/wiki/List_of_current_United_States_senators") %>% 
+  html_table(fill = TRUE) %>% 
+  .[[5]] 
+
+wiki_representatives <- read_html("https://en.wikipedia.org/wiki/List_of_current_members_of_the_United_States_House_of_Representatives") %>% 
+  html_table(fill = TRUE) %>% 
+  .[[7]]
+
+twitter_names <- read_csv("https://raw.githubusercontent.com/oduwsdl/US-Congress/master/116thCongress/116Congress.csv") %>% 
+  select(RealName = `Wikipedia  Names`, twitter_name = CSPAN)
+
+data_name <- data %>%
+  rename (twitter_name = screen_name) %>%
+  left_join(data_name, twitter_names, by = "twitter_name")
+
+wiki_representatives <- wiki_representatives %>%
+  select(- 3) %>%
+ rename (name = Member)
+
+wiki_senators <- wiki_senators %>%
+  select(-2,-4) %>%
+  rename (name = Senator)
+
+data <- data %>%
+  left_join(wiki_senators, by = "name")
+
+data <- data %>%
+  left_join(wiki_representatives, by = "name")
+
+
+
 ```
 Refrences
 
