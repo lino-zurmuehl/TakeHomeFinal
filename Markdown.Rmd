@@ -65,8 +65,17 @@ data_full <- data_sen %>%
   left_join(wiki_representatives, by = "RealName")
 
 data_selected <- data_full %>%
-  select(RealName, created_at, screen_name, type, text, favorite_count, Party.x, Party.y, State, District) %>%
-  #paste(data_full$Party.y, data_full$Party.x)
+  select(RealName, created_at, screen_name, type, text, favorite_count, Party.x, Party.y, State, District)  %>%
+  rename(PartySen = Party.x) %>%
+  rename(PartyRep = Party.y)
+
+keywords <- c("Pandemic", "Covid19", "virus", "corona", "lockdown", "quarantine", "fauci")
+relevant_postings <- data_selected %>% 
+  filter(str_detect(text, pattern = paste(keywords, collapse = "|"))) 
+  
+
+#data_selected$Party <- paste(data_selected$Party.x, data_selected$Party.y, 
+
 
 
 
