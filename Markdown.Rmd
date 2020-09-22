@@ -64,7 +64,7 @@ data_sen <- data_name %>%
   right_join(wiki_senators, by = "RealName")
 
 data_selected <- data_sen %>%
-  select(RealName, created_at, screen_name, type, text, favorite_count, Party, State)
+  select(RealName, created_at, screen_name, type, text, favorite_count, Party, State, status_id)
   
 
 keywords <- c("Pandemic", "Covid19", "virus", "corona", "lockdown", "quarantine", "fauci")
@@ -93,6 +93,34 @@ relevant_postings_sent <-
 rel_post_date <-relevant_postings_sent %>%
   filter(created_at >= as.Date('2020-05-01') & created_at <= as.Date('2020-07-01'))
 
+rel_post_1_tweet <- rel_post_date %>%
+  group_by(created_at, screen_name, type, RealName, Party, State, status_id) %>%
+  summarise(totalSent = sum(value))
+
 ```
-Refrences
+graph State
+```{r}
+graph_sen_state <- ggplot(data = rel_post_1_tweet) +
+  geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
+  scale_color_gradient(high = "green",
+                         low = "red") +
+  facet_wrap(~State,
+               nrow = 5)
+
+graph_sen_state
+```
+Graph Party
+
+```{r}
+graph_sen_party <- ggplot(data = rel_post_1_tweet) +
+  geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
+  scale_color_gradient(high = "green",
+                         low = "red") +
+  facet_wrap(~Party,
+               nrow = 5)
+
+graph_sen_party
+```
+
+References
 
