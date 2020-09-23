@@ -31,6 +31,8 @@ With these findings, the two authors conclude that firstly: a political agenda c
 #install.packages("stopwords")
 #install.packages("SnowballC")
 #install.packages("textdata")
+#install.packages("usmap")
+library(usmap)
 library(textdata)
 library(rvest)
 library(tidytext)
@@ -64,10 +66,11 @@ data_sen <- data_name %>%
   right_join(wiki_senators, by = "RealName")
 
 data_selected <- data_sen %>%
-  select(RealName, created_at, screen_name, type, text, favorite_count, Party, State, status_id)
+  select(RealName, created_at, screen_name, type, text, favorite_count, Party, State, status_id) %>%
+  rename(state=State)
   
 
-keywords <- c("Pandemic", "Covid19", "virus", "corona", "lockdown", "quarantine", "fauci")
+keywords <- c("pandemic", "covid19", "virus", "corona", "lockdown", "quarantine", "fauci", "covid", "coronovirus", "masks", "mask", "testing", "CDC", "second wave")
 relevant_postings <- data_selected %>% 
   filter(str_detect(text, pattern = paste(keywords, collapse = "|"))) 
   
@@ -91,20 +94,21 @@ relevant_postings_sent <-
   inner_join(relevant_postings_tidy_word)
 
 rel_post_date <-relevant_postings_sent %>%
-  filter(created_at >= as.Date('2020-05-01') & created_at <= as.Date('2020-07-01'))
+  filter(created_at >= as.Date('2020-06-01') & created_at <= as.Date('2020-07-01'))
 
 rel_post_1_tweet <- rel_post_date %>%
-  group_by(created_at, screen_name, type, RealName, Party, State, status_id) %>%
+  group_by(created_at, screen_name, type, RealName, Party, state, status_id) %>%
   summarise(totalSent = sum(value))
 
 ```
 graph State
 ```{r}
 graph_sen_state <- ggplot(data = rel_post_1_tweet) +
-  geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
+  geom_jitter(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
                          low = "red") +
-  facet_wrap(~State,
+  labs(title = "Sentiment of Senators", subtitle = "Sentiment of Tweets by different States")+
+  facet_wrap(~state,
                nrow = 5)
 
 graph_sen_state
@@ -121,6 +125,28 @@ graph_sen_party <- ggplot(data = rel_post_1_tweet) +
 
 graph_sen_party
 ```
+Us map
+```{r}
+plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) + 
+  scale_fill_continuous(
+    low = "red", high = "green", name = "Sentiment", label = scales::comma
+  ) + theme(legend.position = "right")
+```
+Us Cases
+```{r}
+corona_cases <- read_csv("table_corona.csv")%>%
+  filter(Date >= as.Date('2020-06-01') & Date <= as.Date('2020-07-01'))
+
+plot_usmap(data = corona_cases, values = "CasesPop" ) + 
+  scale_fill_continuous( low = "white", high = "red") +
+  theme(legend.position = "right")
+
+
+```
+
+
+
+
 
 References
 
