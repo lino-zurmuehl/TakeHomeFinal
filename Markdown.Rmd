@@ -21,7 +21,7 @@ The word cloud does not give a clear answer to the question about the political 
 With these findings, the two authors conclude that firstly: a political agenda can be seen inside of the examined botnet, and secondly: the three patterns of behavior mentioned above (mimicry, Window Dressing, Reverberation) emerge in the examined botnet. In their last paragraph, Hegelich and Janetzko also state that the study reveals the autonomy of the bots, which in my view could be explained in more detail, as it is not clear why these findings infer which algorithms and which abstract rules the bots follow. 
 
 
-```{r}
+```{r echo=FALSE}
 #install.packages("rvest")
 #install.packages("tidyverse")
 #install.packages("rtweet")
@@ -102,7 +102,7 @@ rel_post_1_tweet <- rel_post_date %>%
 
 ```
 graph State
-```{r}
+```{r, echo=FALSE, fig.height=7, fig.width=15}
 graph_sen_state <- ggplot(data = rel_post_1_tweet) +
   geom_jitter(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
@@ -115,7 +115,7 @@ graph_sen_state
 ```
 Graph Party
 
-```{r}
+```{r echo=FALSE}
 graph_sen_party <- ggplot(data = rel_post_1_tweet) +
   geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
@@ -126,20 +126,30 @@ graph_sen_party <- ggplot(data = rel_post_1_tweet) +
 graph_sen_party
 ```
 Us map
-```{r}
-plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) + 
-  scale_fill_continuous(
-    low = "red", high = "green", name = "Sentiment", label = scales::comma
-  ) + theme(legend.position = "right")
-```
-Us Cases
-```{r}
+```{r echo=FALSE, fig.show="hold", out.width="50%"}
 corona_cases <- read_csv("table_corona.csv")%>%
   filter(Date >= as.Date('2020-06-01') & Date <= as.Date('2020-07-01'))
 
+plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) + 
+  scale_fill_continuous(
+    low = "red", high = "white", name = "Sentiment", label = scales::comma
+  ) + theme(legend.position = "right")
+
+
 plot_usmap(data = corona_cases, values = "CasesPop" ) + 
-  scale_fill_continuous( low = "white", high = "red") +
+  scale_fill_continuous( low = "white", high = "red", name = "Cases per 100k inhabitants", limits=c(0,2000)) +
   theme(legend.position = "right")
+```
+Us Map Party
+```{r echo=FALSE, fig.show="hold", out.width="50%"}
+plot_usmap(data = rel_post_1_tweet, values = "Party" ) + 
+  scale_fill_manual( values = c( "blue", "grey", "red"), name = "Party")+
+  theme(legend.position = "right")
+
+plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) + 
+  scale_fill_continuous(
+    low = "red", high = "white", name = "Sentiment", label = scales::comma
+  ) + theme(legend.position = "right")
 
 
 ```
