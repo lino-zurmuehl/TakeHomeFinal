@@ -12,16 +12,21 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a Ukrainian Social Botnet" Hegelich/Janetzko 2016
 
 In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore, they posted the question of what different behaviors of the botnet can be identified, if the botnet is only generating meaningless content (in the article labeled as "noise"[@hegelichAreSocialBots2016]) or political content as well, which words are used the most by the botnet and how do they correlate?  
-By answering those questions Hegelich and Janetzko contribute to a better understanding of botnets in general and reveal the difficulty of actually identifying a bot. This article discloses, how much effort is put into the camouflaging of a bot relative to the actual (political) content that the bot is trying to get out. 
+By answering those questions, Hegelich and Janetzko contribute to a better understanding of botnets in general and reveal the difficulty of actually identifying a bot. This article discloses how much effort is put into the camouflaging of a bot relative to the actual (political) content that the bot is trying to get out. 
 
 Hegelich and Janetzko used different types of analysis to get to this understanding of the botnet. They created a word cloud, looked at the most frequent words used by the botnet, identified the correlations between them, visualized them, and used cluster-analysis, like k-Means cluster and Hierarchical cluster analysis to identify the separation between political content and noise.
 
-The word cloud does not give a clear answer to the question about the political agenda. There are frequent tweets of political and non-political nature to be seen in the cloud. To get a better overview the authors selected the terms that were used at least 50  times, resulting in a list of words in which political terms were heavily favored. In their next step, Hegelich and Janetzko looked at the correlation between these most frequent words and concluded that the most common pair of words was a Ukrainian party name. The k-Means Cluster-Analysis sheds light on the actual behaviors of the botnet. The analysis shows that the biggest cluster of tweets from the bots are links to news-articles, illegal film downloads, and jokes, so there is no real political agenda to be found. But in most of the other clusters, political themes are dominating. But this analysis is the most telling for the distinctive behaviors of the bots which can be summarized into three behaviors: "hid[ing] their bot-identity [...] by being interesting to normal users whilst promoting topics"[@hegelichAreSocialBots2016].
+The word cloud does not give a clear answer to the question about the political agenda. There are frequent tweets of political and non-political nature to be seen in the cloud. To get a better overview the authors selected the terms that were used at least 50  times, resulting in a list of words in which political terms were heavily favored. In their next step, Hegelich and Janetzko looked at the correlation between these most frequent words and concluded that the most common pair of words was a Ukrainian party name. The k-Means Cluster-Analysis sheds light on the actual behaviors of the botnet. The analysis shows that the biggest cluster of tweets from the bots are links to news-articles, illegal film downloads, and jokes, so there is no real political agenda to be found. But in most of the other clusters, political themes are dominating. But this analysis is the most telling for the distinctive behaviors of the bots which can be summarized into three behaviors: "hid[ing] their bot-identity [...] by being interesting to normal users whilst promoting topics"[@hegelichAreSocialBots2016]. #
 
-With these findings, the two authors conclude that firstly: a political agenda can be seen inside of the examined botnet, and secondly: the three patterns of behavior mentioned above (mimicry, Window Dressing, Reverberation) emerge in the examined botnet. In their last paragraph, Hegelich and Janetzko also state that the study reveals the autonomy of the bots, which in my view could be explained in more detail, as it is not clear why these findings infer which algorithms and which abstract rules the bots follow. 
+With these findings, the two authors conclude that firstly: a political agenda can be seen inside of the examined botnet, and secondly: the three patterns of behavior mentioned above (mimicry, Window Dressing, Reverberation) emerge in the examined botnet. In their last paragraph, Hegelich and Janetzko also state that the study reveals the autonomy of the bots, which in my view could be explained in more detail, as it is not clear why these findings infer which algorithms and which abstract rules the bots follow. The second point of criticism would be the Circle-Dendogram of their hierarchical cluster analysis, which is not a very telling graph. There is just too much going on in this figure, it is not lucid. 
+
+The Data analyzed by the two authors can be called "Big Data" if we use Matthew Salaganik's definition [zitat] of big data. Hegelich and Janetzko took all the tweets of 1700 accounts they identified as bots in a 24-hour timespan, which ticks the boxes of "big", "always-on" and "nonreactive". Twitter data in general seems to match the common features of big data due to the means the data is generated: via a social media platform. 
+
+Because the problem of social botnets is a rather new one, this study could be seen as basic research about the behaviors of these botnets, even tho the paper only examines one specific example. By extracting the big data set from twitter and identifying the bots due to their URL, it enabled the authors to get such a great number of relevant data points, that they were able to get a good understanding of social botnets. 
+Hegelich and Janetzko were cautious to filter out the "noise" from the real content, which shows good awareness of the dirtiness of their dataset. They did not base their research only on the word cloud they looked further into the data to pull the curtain away, that the "noise" has generated. -> algorithmically confounded
 
 
-```{r echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 #install.packages("rvest")
 #install.packages("tidyverse")
 #install.packages("rtweet")
@@ -32,6 +37,9 @@ With these findings, the two authors conclude that firstly: a political agenda c
 #install.packages("SnowballC")
 #install.packages("textdata")
 #install.packages("usmap")
+#install.packages("wordcloud")
+#install.packages("RColorBrewer")
+#install.packages("tm")
 library(usmap)
 library(textdata)
 library(rvest)
@@ -41,12 +49,17 @@ library(stopwords)
 library(SnowballC)
 library(tidyverse)
 library(stringr)
+library(wordcloud)
+library(RColorBrewer)
+library(tm)
 data <- read_csv("timelines.csv") %>% 
   mutate(screen_name = str_to_lower(screen_name))#twitter names case sensitive not matching the twitter data
 
 wiki_senators <- read_html("https://en.wikipedia.org/wiki/List_of_current_United_States_senators") %>% 
   html_table(fill = TRUE) %>% 
-  .[[5]] 
+  .[[5]] %>%
+  select(-2,-4) %>%
+  rename (RealName = Senator)
 
 
 twitter_names <- read_csv("https://raw.githubusercontent.com/oduwsdl/US-Congress/master/116thCongress/116Congress.csv") %>% 
@@ -54,16 +67,10 @@ twitter_names <- read_csv("https://raw.githubusercontent.com/oduwsdl/US-Congress
   mutate(screen_name = str_to_lower(screen_name)) #twitter names case sensitive not matching the twitter data
 
 data_name <- data %>%
-  left_join(twitter_names, by = "screen_name")
-
-
-wiki_senators <- wiki_senators %>%
-  select(-2,-4) %>%
-  rename (RealName = Senator)
-
+  left_join(twitter_names, by = "screen_name") #getting the real names of the senetors and representatives
 
 data_sen <- data_name %>%
-  right_join(wiki_senators, by = "RealName")
+  right_join(wiki_senators, by = "RealName")# joining
 
 data_selected <- data_sen %>%
   select(RealName, created_at, screen_name, type, text, favorite_count, Party, State, status_id) %>%
@@ -86,7 +93,10 @@ relevant_postings_tidy <- relevant_postings_clean %>%
   filter(!str_detect(token, "[:digit:]")) %>% 
   mutate(token = wordStem(token, language = "en"))
 
+
+
 relevant_postings_tidy_word <-relevant_postings_tidy %<>% rename(word = token)
+
 
 relevant_postings_sent <-
   get_sentiments("afinn") %>% 
@@ -96,13 +106,48 @@ relevant_postings_sent <-
 rel_post_date <-relevant_postings_sent %>%
   filter(created_at >= as.Date('2020-06-01') & created_at <= as.Date('2020-07-01'))
 
+
+
 rel_post_1_tweet <- rel_post_date %>%
   group_by(created_at, screen_name, type, RealName, Party, state, status_id) %>%
   summarise(totalSent = sum(value))
 
 ```
-graph State
-```{r, echo=FALSE, fig.height=7, fig.width=15}
+
+
+## Wordcloud
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#Removing the stemming funktion to get full words in the wordcloud
+relevant_postings_no_stem <- relevant_postings_clean %>% 
+  unnest_tokens(output = token, input = text) %>% 
+  anti_join(get_stopwords(), by = c("token" = "word")) %>% 
+  filter(!str_detect(token, "[:digit:]"))%>% 
+  rename(word = token)
+
+
+relevant_postings_wordcloud <- 
+  get_sentiments("afinn") %>% 
+  inner_join(relevant_postings_no_stem)
+
+
+wordcloud(words = relevant_postings_wordcloud$word, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "RdYlGn"))
+
+  
+
+```
+
+
+
+
+
+
+
+## Graph State
+
+```{r, echo=FALSE, fig.height=7, fig.width=15, message=FALSE, warning=FALSE}
 graph_sen_state <- ggplot(data = rel_post_1_tweet) +
   geom_jitter(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
@@ -113,9 +158,11 @@ graph_sen_state <- ggplot(data = rel_post_1_tweet) +
 
 graph_sen_state
 ```
-Graph Party
+## Graph Party
 
-```{r echo=FALSE}
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 graph_sen_party <- ggplot(data = rel_post_1_tweet) +
   geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
@@ -125,8 +172,13 @@ graph_sen_party <- ggplot(data = rel_post_1_tweet) +
 
 graph_sen_party
 ```
-Us map
-```{r echo=FALSE, fig.show="hold", out.width="50%"}
+##  Us map
+
+
+
+
+
+```{r, echo=FALSE, fig.show="hold", out.width="50%", message=FALSE, warning=FALSE}
 corona_cases <- read_csv("table_corona.csv")%>%
   filter(Date >= as.Date('2020-06-01') & Date <= as.Date('2020-07-01'))
 
@@ -140,8 +192,13 @@ plot_usmap(data = corona_cases, values = "CasesPop" ) +
   scale_fill_continuous( low = "white", high = "red", name = "Cases per 100k inhabitants", limits=c(0,2000)) +
   theme(legend.position = "right")
 ```
-Us Map Party
-```{r echo=FALSE, fig.show="hold", out.width="50%"}
+## Us Map Party
+
+
+
+
+
+```{r, echo=FALSE, fig.show="hold", out.width="50%", message=FALSE, warning=FALSE}
 plot_usmap(data = rel_post_1_tweet, values = "Party" ) + 
   scale_fill_manual( values = c( "blue", "grey", "red"), name = "Party")+
   theme(legend.position = "right")
