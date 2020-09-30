@@ -11,14 +11,14 @@ bibliography: TakeHomeFinal.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-## Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a Ukrainian Social Botnet" Hegelich/Janetzko 2016
+### Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a Ukrainian Social Botnet" Hegelich/Janetzko 2016
 
 In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore, they posted the question of what different behaviors of the botnet can be identified, if the botnet is only generating meaningless content (in the article labeled as "noise"[@hegelichAreSocialBots2016]) or political content as well, which words are used the most by the botnet and how do they correlate?  
 By answering those questions, Hegelich and Janetzko contribute to a better understanding of botnets in general and reveal the difficulty of actually identifying a bot. This article discloses how much effort is put into the camouflaging of a bot relative to the actual (political) content that the bot is trying to get out. 
 
 Hegelich and Janetzko used different types of analysis to get to this understanding of the botnet. They created a word cloud, looked at the most frequent words used by the botnet, identified the correlations between them, visualized them, and used cluster-analysis, like k-Means cluster and Hierarchical cluster analysis to identify the separation between political content and noise.
 
-The word cloud does not give a clear answer to the question about the political agenda. There are frequent tweets of political and non-political nature to be seen in the cloud. To get a better overview the authors selected the terms that were used at least 50  times, resulting in a list of words in which political terms were heavily favored. In their next step, Hegelich and Janetzko looked at the correlation between these most frequent words and concluded that the most common pair of words was a Ukrainian party name. The k-Means Cluster-Analysis sheds light on the actual behaviors of the botnet. The analysis shows that the biggest cluster of tweets from the bots are links to news-articles, illegal film downloads, and jokes, so there is no real political agenda to be found. But in most of the other clusters, political themes are dominating. But this analysis is the most telling for the distinctive behaviors of the bots which can be summarized into three behaviors: "hid[ing] their bot-identity [...] by being interesting to normal users whilst promoting topics"[@hegelichAreSocialBots2016]. #
+The word cloud does not give a clear answer to the question about the political agenda. There are frequent tweets of political and non-political nature to be seen in the cloud. To get a better overview the authors selected the terms that were used at least 50  times, resulting in a list of words in which political terms were heavily favored. In their next step, Hegelich and Janetzko looked at the correlation between these most frequent words and concluded that the most common pair of words was a Ukrainian party name. The k-Means Cluster-Analysis sheds light on the actual behaviors of the botnet. The analysis shows that the biggest cluster of tweets from the bots are links to news-articles, illegal film downloads, and jokes, so there is no real political agenda to be found. But in most of the other clusters, political themes are dominating. But this analysis is the most telling for the distinctive behaviors of the bots which can be summarized into three behaviors: "hid[ing] their bot-identity [...] by being interesting to normal users whilst promoting topics"[@hegelichAreSocialBots2016].
 
 With these findings, the two authors conclude that firstly: a political agenda can be seen inside of the examined botnet, and secondly: the three patterns of behavior mentioned above (mimicry, Window Dressing, Reverberation) emerge in the examined botnet. In their last paragraph, Hegelich and Janetzko also state that the study reveals the autonomy of the bots, which in my view could be explained in more detail, as it is not clear why these findings infer which algorithms and which abstract rules the bots follow. The second point of criticism would be the Circle-Dendogram of their hierarchical cluster analysis, which is not a very telling graph. There is just too much going on in this figure, it is not lucid. 
 
@@ -26,6 +26,17 @@ The Data analyzed by the two authors can be called "Big Data" if we use Matthew 
 
 Because the problem of social botnets is a rather new one, this study could be seen as basic research about the behaviors of these botnets, even tho the paper only examines one specific example. By extracting the big data set from twitter and identifying the bots due to their URL, it enabled the authors to get such a great number of relevant data points, that they were able to get a good understanding of social botnets. 
 Hegelich and Janetzko were cautious to filter out the "noise" from the real content, which shows good awareness of the dirtiness of their dataset. They did not base their research only on the word cloud they looked further into the data to pull the curtain away, that the "noise" has generated. -> algorithmically confounded
+
+
+
+### Data challange
+
+## Introduction
+
+If there is one big topic discussed in American politics right now, it is the Covid-19 pandemic. .....
+This article tries to address the following research question: Is there a connection between a high number of Covid cases in one state and a low sentiment of the tweets posted by the Senators of this particular state. 
+
+
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -42,6 +53,12 @@ Hegelich and Janetzko were cautious to filter out the "noise" from the real cont
 #install.packages("wordcloud")
 #install.packages("RColorBrewer")
 #install.packages("tm")
+#install.packages("lm.beta")
+#install.packages("corrr")
+#install.packages("moderndive")
+library(moderndive)
+library(corrr)
+library(lm.beta)
 library(usmap)
 library(textdata)
 library(rvest)
@@ -200,6 +217,10 @@ plot_usmap(data = corona_cases, values = "CasesPop" ) +
   scale_fill_continuous( low = "white", high = "red", name = "Cases per 100k inhabitants", limits=c(0,2500)) +
   theme(legend.position = "right")
 ```
+
+
+
+
 ## Us Map Party
 
 
