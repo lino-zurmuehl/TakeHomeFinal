@@ -34,7 +34,13 @@ Hegelich and Janetzko were cautious to filter out the "noise" from the real cont
 ## Introduction
 
 If there is one big topic discussed in American politics right now, it is the Covid-19 pandemic. .....
-This article tries to address the following research question: Is there a connection between a high number of Covid cases in one state and a low sentiment of the tweets posted by the Senators of this particular state. 
+This article tries to address the following research question: Is there a connection between a high number of Covid cases in a state and negative tweets about the coronavirus posted by the Senators of this particular state? To get an answer to this question I used sentiment analysis on the tweets from 01.06.2020 until 01.07.2020 from senators to get an estimated sentiment of each tweet. This sentiment was then matched with data of the corona cases in each state. The result demonstrates that there are too many variables that play into the tweet behavior of senators to recognize a high number of corona cases as the cause of a negative tweets about the pandemic. 
+
+## The Data
+
+The data used in this article are the tweets from every senator in the month of June. I made this choice to get a particular timeframe due to the ever changing number of Covid-19 cases.  These tweets were matched with data from Wikipedia in order to obtain the states they represent and after that filtered by keywords associated with the pandemic. The data on the Corona cases I got from my fellow classmate Lena Richter, who worked on the Corona dataset. It contains Covid cases of each state per 100000 inhabitants. 
+
+
 
 
 
@@ -183,34 +189,19 @@ graph_sen_state <- ggplot(data = rel_post_1_tweet) +
 
 graph_sen_state
 ```
-## Graph Party
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-graph_sen_party <- ggplot(data = rel_post_1_tweet) +
-  geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
-  scale_color_gradient(high = "green",
-                         low = "red", name = "Sentiment") +
-   labs(title = "Sentiment of the Party", subtitle = "Sentiment of Tweets by different Parties")+
-  theme_dark()+
-  xlab("Date")+
-  ylab("Sentiment")+
-  facet_wrap(~Party,
-               nrow = 5)
-
-graph_sen_party
-```
 
 
 ##  Us map
 
 ```{r, echo=FALSE, fig.show="hold", out.width="50%", message=FALSE, warning=FALSE}
 corona_cases <- read_csv("table_corona.csv")%>%
-  filter(Date == as.Date('2020-07-01'))
+  filter(Date == as.Date('2020-07-01')) #this data I obtained from my fellow course participant Lena Richter, who worked on the corona dataset
 
 plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) + 
   scale_fill_continuous(
     low = "red", high = "white", name = "Sentiment", label = scales::comma
-  ) + theme(legend.position = "right")
+  ) + theme(legend.position = "right")+
+  labs(title = "Sentiment of Senators", subtitle = "Sentiment of Tweets from the Senators of each State")+
 
 
 plot_usmap(data = corona_cases, values = "CasesPop" ) + 
@@ -227,15 +218,20 @@ plot_usmap(data = corona_cases, values = "CasesPop" ) +
 
 
 
-```{r, echo=FALSE, fig.show="hold", out.width="50%", message=FALSE, warning=FALSE}
-plot_usmap(data = rel_post_1_tweet, values = "Party" ) + 
-  scale_fill_manual( values = c( "blue", "grey", "red"), name = "Party")+
-  theme(legend.position = "right")
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+graph_sen_party <- ggplot(data = rel_post_1_tweet) +
+  geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
+  scale_color_gradient(high = "green",
+                         low = "red", name = "Sentiment") +
+   labs(title = "Sentiment of the Party", subtitle = "Sentiment of Tweets by different Parties")+
+  theme_dark()+
+  xlab("Date")+
+  ylab("Sentiment")+
+  facet_wrap(~Party,
+               nrow = 5)
 
-plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) + 
-  scale_fill_continuous(
-    low = "red", high = "white", name = "Sentiment", label = scales::comma
-  ) + theme(legend.position = "right")
+graph_sen_party
+
 
 
 ```
