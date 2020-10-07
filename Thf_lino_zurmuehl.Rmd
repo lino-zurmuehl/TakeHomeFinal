@@ -1,7 +1,7 @@
 ---
 title: "Final assingment BDAwR"
 author: "Lino Zurmühl"
-date: "8 9 2020"
+date: "`r lubridate::today()`"
 output:
   pdf_document: default
   html_document: default
@@ -11,7 +11,7 @@ bibliography: TakeHomeFinal.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a Ukrainian Social Botnet" Hegelich/Janetzko 2016
+## Article review "Are Social Bots on Twitter Political Actors? Empirical Evidence from a Ukrainian Social Botnet" Hegelich/Janetzko 2016
 
 In their article from 2016 Hegelich and Janetzko asked themselves the question: are social bots on Twitter Political Actors? To answer this question they picked an exemplary botnet that was posting about the Ukrainian/Russian conflict. The authors collected the data via the twitter hashtag "#Ukraine" and with this dataset tried to find a political agenda behind the, in the dataset emerging, Ukrainian social botnet. Furthermore, they posted the question of what different behaviors of the botnet can be identified, if the botnet is only generating meaningless content (in the article labeled as "noise"[@hegelichAreSocialBots2016]) or political content as well, which words are used the most by the botnet and how do they correlate?  
 By answering those questions, Hegelich and Janetzko contribute to a better understanding of botnets in general and reveal the difficulty of actually identifying a bot. This article discloses how much effort is put into the camouflaging of a bot relative to the actual (political) content that the bot is trying to get out. 
@@ -22,29 +22,30 @@ The word cloud does not give a clear answer to the question about the political 
 
 With these findings, the two authors conclude that firstly: a political agenda can be seen inside of the examined botnet, and secondly: the three patterns of behavior mentioned above (mimicry, Window Dressing, Reverberation) emerge in the examined botnet. In their last paragraph, Hegelich and Janetzko also state that the study reveals the autonomy of the bots, which in my view could be explained in more detail, as it is not clear why these findings infer which algorithms and which abstract rules the bots follow. The second point of criticism would be the Circle-Dendogram of their hierarchical cluster analysis, which is not a very telling graph. There is just too much going on in this figure, it is not lucid. 
 
-The Data analyzed by the two authors can be called "Big Data" if we use Matthew Salaganik's definition [zitat] of big data. Hegelich and Janetzko took all the tweets of 1700 accounts they identified as bots in a 24-hour timespan, which ticks the boxes of "big", "always-on" and "nonreactive". Twitter data in general seems to match the common features of big data due to the means the data is generated: via a social media platform. 
+The Data analyzed by the two authors can be called "Big Data" if we use Matthew Salaganik's definition [@salganikBitBitSocial2018] of big data. Hegelich and Janetzko took all the tweets of 1700 accounts they identified as bots in a 24-hour timespan, which ticks the boxes of "big", "always-on" and "nonreactive". Twitter data in general seems to match the common features of big data due to the means the data is generated: via a social media platform. 
 
 Because the problem of social botnets is a rather new one, this study could be seen as basic research about the behaviors of these botnets, even tho the paper only examines one specific example. By extracting the big data set from twitter and identifying the bots due to their URL, it enabled the authors to get such a great number of relevant data points, that they were able to get a good understanding of social botnets. 
-Hegelich and Janetzko were cautious to filter out the "noise" from the real content, which shows good awareness of the dirtiness of their dataset. They did not base their research only on the word cloud they looked further into the data to pull the curtain away, that the "noise" has generated. -> algorithmically confounded
+Hegelich and Janetzko were cautious to filter out the "noise" from the real content, which shows good awareness of the dirtiness of their dataset. They did not base their research only on the word cloud they looked further into the data to pull the curtain away, that the "noise" has generated. 
 
 
 
-### Data challange
+## Data challenge
 
-## Introduction
+### Introduction
 
-If there is one big topic discussed in American politics right now, it is the Covid-19 pandemic. .....
-This article tries to address the following research question: Is there a connection between a high number of Covid cases in a state and negative tweets about the coronavirus posted by the Senators of this particular state? To get an answer to this question I used sentiment analysis on the tweets from 01.06.2020 until 01.07.2020 from senators to get an estimated sentiment of each tweet. This sentiment was then matched with data of the corona cases in each state. The result demonstrates that there are too many variables that play into the tweet behavior of senators to recognize a high number of corona cases as the cause of a negative tweets about the pandemic. 
+If there is one big topic discussed in American politics right now, it is the Covid-19 pandemic. How are politicians communicating this crisis with the people?
+This article tries to address the following research question: Is there a connection between a high number of COVID cases in a state and negative tweets about the coronavirus posted by the Senators of this particular state? To get an answer to this question I used sentiment analysis on the tweets from 01.06.2020 until 01.07.2020 from senators to get an estimated sentiment of each tweet. This sentiment was then matched with data of the corona cases in each state. The result demonstrates that there are too many variables that play into the tweeting behavior of senators to recognize a high number of corona cases as the cause of negative tweets about the pandemic. 
 
-## The Data
+### The Data
 
-The data used in this article are the tweets from every senator in the month of June. I made this choice to get a particular timeframe due to the ever changing number of Covid-19 cases.  These tweets were matched with data from Wikipedia in order to obtain the states they represent and after that filtered by keywords associated with the pandemic. The data on the Corona cases I got from my fellow classmate Lena Richter, who worked on the Corona dataset. It contains Covid cases of each state per 100000 inhabitants. 
+The data used in this article are the tweets from every senator in June. I made this choice to get a particular timeframe due to the ever-changing number of Covid-19 cases.  These tweets were matched with data from Wikipedia to obtain the states they represent and after that filtered by keywords associated with the pandemic. The data on the Corona cases I got from my classmate Lena Richter, who worked on the Corona dataset. It contains COVID cases of each state per 100000 inhabitants. 
+
+### Methods
+
+To get the dataset ready for the analysis, only the necessary variables were filtered out for a better overview of the data. Secondly, the raw text of the tweets had to be pre-processed and tidied up for the sentiment analysis to work. That means all text to lower case, removing stopwords and stemming each word. This resulted in a dataset in which every stemmed word of every tweet occurs individually so that it is possible to join this data with the data containing a list of stemmed words with a sentiment from the tidytext package. The final step involved regrouping the data from individual words to the whole tweet and summing up the sentiments of each individual word in one tweet, in order to get the sentiment of each tweet. With this done, I used the word cloud package to generate a cloud of the most used words with a sentiment in the tweets (*figure 1*) and a boxplot with words used at least 300 times(*figure 2*). To get a better overview of the tweet sentiment in the individual states *figure 3* was plotted, but this graph does not give any information about the connection to the corona cases. To archive this I created 2 heatmaps (*figures 4/5*) with the "usmap" package, one illustrating the sentiment of the senators from each state and the other showing the Covid-19 cases. The last plot displays another possible variable that might influence the sentiment of the tweets: the partisanship of each senator. 
 
 
-
-
-
-
+### The Results
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 #install.packages("rvest")
 #install.packages("tidyverse")
@@ -59,12 +60,6 @@ The data used in this article are the tweets from every senator in the month of 
 #install.packages("wordcloud")
 #install.packages("RColorBrewer")
 #install.packages("tm")
-#install.packages("lm.beta")
-#install.packages("corrr")
-#install.packages("moderndive")
-library(moderndive)
-library(corrr)
-library(lm.beta)
 library(usmap)
 library(textdata)
 library(rvest)
@@ -85,6 +80,8 @@ wiki_senators <- read_html("https://en.wikipedia.org/wiki/List_of_current_United
   .[[5]] %>%
   select(-2,-4) %>%
   rename (RealName = Senator)
+
+#write_csv(wiki_senators, "Bigdata/TakeHomeFinal")
 
 
 twitter_names <- read_csv("https://raw.githubusercontent.com/oduwsdl/US-Congress/master/116thCongress/116Congress.csv") %>% 
@@ -139,11 +136,7 @@ rel_post_1_tweet <- rel_post_date %>%
 
 ```
 
-
-
-## Wordcloud
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE , fig.height=4, fig.width=4}
 #Removing the stemming function to get full words in the wordcloud
 relevant_postings_no_stem <- relevant_postings_clean %>% 
   unnest_tokens(output = token, input = text) %>% 
@@ -164,20 +157,38 @@ wordcloud(words = relevant_postings_wordcloud$word, min.freq = 1,
   
 
 ```
+*Fig. 1. WordCloud*
+
+The word cloud above shows the 200 most frequently tweeted words by the senators with either a positive or negative sentiment. The two most tweeted sentimental words "help" and "care" have both a positive association, which could indicate an overall positive leaning in the tweets about Covid-19. In Fig. 2, showing the words tweeted at least 300 times, we can also see the high frequency of these two words, yet here the sentiment of the overall words seems to be more mixed. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=10}
+relevant_postings_no_stem_count <- relevant_postings_wordcloud %>%
+  count(word) %>%
+  filter (n>300)
+
+graph_freq_words <- ggplot(data= relevant_postings_no_stem_count, aes(word, n))+
+  geom_bar(stat = "identity", fill= "white", coulour = "white")+
+   theme_dark()+
+  ylab("Frequency")+
+  xlab("")+
+  labs(title = "Frequency of sentimental Words", subtitle = "Word with a frequency of at least 300")+
+  coord_flip()
+
+graph_freq_words
+
+```
+*Fig. 2 Frequency of words*
+
+In the graph below the sentiment of tweets is split up into the different states the senators represent. It can be observed that there is a big gap in the rate in which the senators are tweeting. The Senators of Georgia and Nebraska for example are tweeting far less often about Covid-19, than the senators of Nevada and Texas. The sentiment yet seems to hover on average around zero. There is no significant pattern to be seen here. 
 
 
 
-
-
-
-
-## Graph State
-
-```{r, echo=FALSE, fig.height=7, fig.width=15, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, fig.height=8, fig.width=15, message=FALSE, warning=FALSE}
 graph_sen_state <- ggplot(data = rel_post_1_tweet) +
   geom_jitter(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
-                         low = "red") +
+                         low = "red", name = "Sentiment") +
   labs(title = "Sentiment of Senators", subtitle = "Sentiment of Tweets by different States")+
  theme_dark()+
   theme(axis.title.x=element_blank(),
@@ -189,9 +200,11 @@ graph_sen_state <- ggplot(data = rel_post_1_tweet) +
 
 graph_sen_state
 ```
+*Fig. 3: Sentiment of senators*
+
+By plotting the sentiment data in a heatmap we can compare them to the number of Covid-19 in each state. Here (*Fig. 4/5*) we can observe that even tho states like New York have a lot of COVID cases, the sentiment of tweets posted by the New Yorker senators is not as negative. Again we cannot identify a significant pattern in this figure. (Florida is gray, due to insufficient twitter data)
 
 
-##  Us map
 
 ```{r, echo=FALSE, fig.show="hold", out.width="50%", message=FALSE, warning=FALSE}
 corona_cases <- read_csv("table_corona.csv")%>%
@@ -201,24 +214,19 @@ plot_usmap(data = rel_post_1_tweet, values = "totalSent" ) +
   scale_fill_continuous(
     low = "red", high = "white", name = "Sentiment", label = scales::comma
   ) + theme(legend.position = "right")+
-  labs(title = "Sentiment of Senators", subtitle = "Sentiment of Tweets from the Senators of each State")+
+  labs(title = "Sentiment of Senators", subtitle = "Sentiment of Tweets from the Senators of each State")
 
 
 plot_usmap(data = corona_cases, values = "CasesPop" ) + 
   scale_fill_continuous( low = "white", high = "red", name = "Cases per 100k inhabitants", limits=c(0,2500)) +
-  theme(legend.position = "right")
+  theme(legend.position = "right")+
+  labs(title = "Cases of Covid-19 ", subtitle = "Cases of Covid-19 on 01.07.2020 per 100k  inhabitants")
 ```
+*Fig. 4/5 Connection between sentiment and Covid-19 cases*
 
+All these graphs disclose that there are problems with the hypothesis of this article. None of them really could illustrate a correlation between a negative sentiment of senators tweets and a high number of corona cases in each state. The first thing that may blur the correlation is the fact that most senators do not aspire to cause panic in the population, therefore they use a more positive tone to describe the current situation. Secondly, there are just too many variables that play into these tweets. Partisanship for example could be a big variable that causes the senators to tweet in a specific manner.  
 
-
-
-## Us Map Party
-
-
-
-
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
 graph_sen_party <- ggplot(data = rel_post_1_tweet) +
   geom_point(aes(x = created_at, y = totalSent, color = totalSent))+
   scale_color_gradient(high = "green",
@@ -235,10 +243,13 @@ graph_sen_party
 
 
 ```
+*Fig. 6 Partisanship*
+
+In *Fig. 6* the difference between the democratic and republican Party can be observed. The Republican Senators seem to use more positive words in their tweets about Covid-19 than Democrats. This is just one example of the different variables that play a role in these tweets. 
+
+And lastly, the data seems not to be big enough. The twitter data of some senators, like the senators of Florida, were so marginal they could not be taken into account. A cause of this could be the age of the senators, hence they don't use social media that frequently.
 
 
 
-
-
-References
+*References*
 
